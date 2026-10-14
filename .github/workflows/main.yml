@@ -155,15 +155,10 @@ jobs:
         if: inputs.clean_build != true
         env:
           KSU_BRANCH: ${{ inputs.kernelsu_branch || 'main' }}
-          SUSFS_ENABLED: ${{ inputs.cancel_susfs != true }}
         run: |
           set -euo pipefail
-          SUSFS_COMPAT_SHA="f1ae2cebb3503236cfde52fb3caf8e69f1c083a1"
           if [[ "$KSU_BRANCH" =~ ^[a-fA-F0-9]{40}$ ]]; then
             sha="${KSU_BRANCH,,}"
-          elif [[ "$KSU_BRANCH" == "main" && "$SUSFS_ENABLED" == "true" ]]; then
-            sha="$SUSFS_COMPAT_SHA"
-            echo "检测到启用 SUSFS，默认锁定 BakaSU 到兼容提交: $sha"
           else
             git check-ref-format --branch "$KSU_BRANCH"
             sha=$(git ls-remote --heads https://github.com/Baka-SU/BakaSU.git "refs/heads/$KSU_BRANCH" | awk '{ print $1 }')

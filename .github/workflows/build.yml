@@ -568,15 +568,11 @@ jobs:
         if: inputs.clean_build != true
         run: |
           branch_input="${{ inputs.ksu_branch }}"
-          SUSFS_COMPAT_SHA="f1ae2cebb3503236cfde52fb3caf8e69f1c083a1"
 
           # 如果用户输入了自定义分支名或 commit hash，直接使用
           if [ -n "$branch_input" ]; then
             BRANCH="$branch_input"
             echo "使用自定义分支/提交: $branch_input"
-          elif [ "${{ inputs.enable_susfs }}" = "true" ]; then
-            BRANCH="$SUSFS_COMPAT_SHA"
-            echo "检测到启用 SUSFS，默认锁定 BakaSU 到兼容提交: $BRANCH"
           else
             # BakaSU 默认使用 main 分支
             BRANCH="main"
